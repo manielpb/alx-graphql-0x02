@@ -7,11 +7,15 @@ import { useEffect, useState } from "react";
 
 const Home: React.FC = () => {
   const [page, setPage] = useState<number>(1)
-  const { loading, error, data, refetch} = useQuery(GET_EPISODES, {
+  const { loading, error, data, refetch } = useQuery<
+    { episode: { results: EpisodeProps[]; info: { pages: number } } },
+    { page: number }
+  >(GET_EPISODES, {
     variables: {
       page: page
     }
   })
+  
   useEffect(()=> {
     refetch()
   }, [page,refetch])
@@ -47,7 +51,7 @@ const Home: React.FC = () => {
               Previous
             </button>
             <button 
-              onClick={()=> setPage(prev => prev < info.pages ? prev + 1: prev)}
+              onClick={() => setPage(prev => prev < (info?.pages ?? 1) ? prev + 1 : prev)}
               className="bg-[#45B69C] text-white font-semibold py-2 px-6 rounded-lg shadow-lg hover:bg-[#3D9B80] transition duration-200 transform hover:scale-105">
                 Next
               </button>
